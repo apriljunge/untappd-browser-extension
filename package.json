@@ -1,0 +1,17 @@
+{
+  "name": "untappd-browser-extension",
+  "repository": "git@github.com:apriljunge/untappd-browser-extension.git",
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "web-ext": "^4.2.0"
+  },
+  "scripts": {
+    "dev": "web-ext run",
+    "lint": "web-ext lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  }
+}
