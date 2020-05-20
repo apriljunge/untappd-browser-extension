@@ -1,0 +1,10 @@
+{
+    "extensionName": {
+        "message": "Untappd browser extension",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "Enhance beer shops with your untappd data",
+        "description": "Description of the extension."
+    }
+}
