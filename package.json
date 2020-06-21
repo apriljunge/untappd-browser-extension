@@ -3,11 +3,12 @@
   "repository": "git@github.com:apriljunge/untappd-browser-extension.git",
   "devDependencies": {
     "husky": "^4.2.5",
+    "standardx": "^5.0.0",
     "web-ext": "^4.2.0"
   },
   "scripts": {
     "dev": "web-ext run",
-    "lint": "web-ext lint"
+    "lint": "web-ext lint & standardx --fix"
   },
   "husky": {
     "hooks": {
