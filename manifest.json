@@ -3,5 +3,22 @@
     "version": "0.0.1",
     "name": "__MSG_extensionName__",
     "description": "__MSG_extensionDescription__",
-    "default_locale": "en"
+    "default_locale": "en",
+    "background": {
+        "page": "background.html"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{62034edb-46cc-45bb-90a4-d93d8c76ccdb}"
+        }
+    },
+    "browser_action": {
+        "browser_style": true,
+        "default_title": "Whereami?"
+    },
+    "permissions": [
+        "storage",
+        "identity",
+        "<all_urls>"
+    ]
 }
