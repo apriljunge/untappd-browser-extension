@@ -1,7 +1,7 @@
-import {UntappdClientId} from "./secrets.js";
+import {UntappdClientId} from "../../secrets.js";
 import {buildUrlWithSearchParms} from '../utils.js'
 
-export default class UntappdClient {
+export default class Api {
     constructor() {
         this.baseUrl = "https://api.untappd.com/v4/";
         this.clientId = UntappdClientId;
@@ -12,64 +12,63 @@ export default class UntappdClient {
             throw Error('Please define Untappd Client Id');
         }
     }
-    _setRateLimit(count) {
+    setRateLimit(count) {
         this.rateLimit = count;
     }
-    _setRateLimitRemaining(count) {
+    setRateLimitRemaining(count) {
         this.rateLimitRemaining = count;
     }
-    _getFromApi (path, parameters) {
-        return this._callApi(path, parameters)
-            .then(this._checkResponseCode)
-            .then(this._extractRateLimit)
-            .then(this._parseResponseAsJson)
-            .then(this._checkMetaResponseCode)
-            .then(this._extractResponseFromApiCall)
+    getFromApi (path, parameters) {
+        return this.callApi(path, parameters)
+            .then(this.checkResponseCode)
+            .then(this.extractRateLimit)
+            .then(this.parseResponseAsJson)
+            .then(this.checkMetaResponseCode)
+            .then(this.extractResponseFromApiCall)
     }
-    _callApi(path, parameters = {}) {
+    callApi(path, parameters = {}) {
         const url = `${this.baseUrl}${path}`;
         const urlWithParameters = buildUrlWithSearchParms(url, parameters);
 
+        //ToDo: think about good user agent for identification
         const request = new Request(urlWithParameters, {
             method: "GET",
-            headers: new Headers({'User-Agent': `Bla bla bla (${this.clientId})`})
+            headers: new Headers({'User-Agent': `(${this.clientId})`})
         });
 
         return fetch(request);
     }
-    _checkResponseCode(response) {
+    checkResponseCode(response) {
         if (response.ok === false) {
             throw new Error('Error while fetching Untappd data');
         }
 
         return response;
     }
-    _extractRateLimit(response) {
+    extractRateLimit(response) {
         const headers = response.headers;
 
         if (headers.has('X-Ratelimit-Limit')) {
-            this._setRateLimit(headers.get('X-Ratelimit-Limit'));
+            this.setRateLimit(headers.get('X-Ratelimit-Limit'));
         }
 
         if (headers.has('X-Ratelimit-Remaining')) {
-            this._setRateLimitRemaining(headers.get('X-Ratelimit-Remaining'));
+            this.setRateLimitRemaining(headers.get('X-Ratelimit-Remaining'));
         }
 
         return response;
     }
-    _parseResponseAsJson(response) {
+    parseResponseAsJson(response) {
         return response.json();
     }
-    _checkMetaResponseCode(responseJson) {
+    checkMetaResponseCode(responseJson) {
         if (responseJson.meta?.http_code !== 200) {
             throw new Error('Wrong response code from Untappd API');
         }
 
-        console.log(responseJson);
         return responseJson;
     }
-    _extractResponseFromApiCall(responseJson) {
-        console.log(responseJson.response);
+    extractResponseFromApiCall(responseJson) {
         return responseJson.response;
     }
 }

@@ -1,26 +1,30 @@
-import UntappdClient from '../UntappdClient.js';
+import Api from './Api.js';
 
-import {buildUrlWithSearchParms} from "../../utils.js";
-import {UntappdClientSecret} from "../secrets.js";
+import {buildUrlWithSearchParms} from "../utils.js";
+import {UntappdClientSecret} from "../../secrets.js";
 
-export default class UntappdAuthentication extends UntappdClient {
+export default class Authentication extends Api {
     constructor() {
         super();
 
         this.baseUrl = "https://untappd.com/oauth/";
         this.redirectUrl = browser.identity.getRedirectURL();
-
-        return this.getAccessToken();
     }
-    async getAccessToken() {
-        /* TODO PRETTIER! */
-        const redirectUrl = await this._authenticate();
-        const code = this._extractUrlParameter(redirectUrl, 'code');
-        const {access_token} = await this._authorize(code);
-
-        return access_token;
+    get token() {
+        return new Promise((resolve) => {
+            this.authenticate()
+                .then((redirectUrl) => {
+                    return this.extractUrlParameter(redirectUrl, 'code');
+                })
+                .then((code) => {
+                    return this.authorize(code);
+                })
+                .then(({access_token}) => {
+                    resolve(access_token);
+                });
+        });
     }
-    _authenticate() {
+    authenticate() {
         const authURL = buildUrlWithSearchParms(
             this.baseUrl + 'authenticate',
             {
@@ -35,11 +39,11 @@ export default class UntappdAuthentication extends UntappdClient {
             interactive: true
         });
     }
-    _extractUrlParameter(url, parameter) {
+    extractUrlParameter(url, parameter) {
         return new URL(url).searchParams.get(parameter);
     }
-    _authorize(code) {
-        return this._getFromApi('authorize', {
+    authorize(code) {
+        return this.getFromApi('authorize', {
             client_id: this.clientId,
             client_secret: UntappdClientSecret,
             redirect_url: this.redirectUrl,

@@ -1,4 +1,4 @@
-export default class CachedStorage {
+export default class BrowserStorage {
     constructor(storageKey) {
         this.key = storageKey;
         this.chachedValue = null;
@@ -20,5 +20,4 @@ export default class CachedStorage {
                 .then(() => resolve())
         });
     }
-
 }

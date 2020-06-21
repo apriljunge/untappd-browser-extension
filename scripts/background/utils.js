@@ -1,10 +1,4 @@
-/**
- *
- * @param url
- * @param parameters
- * @returns {string}
- */
-const buildUrlWithSearchParms = function(url, parameters) {
+const buildUrlWithSearchParms = (url, parameters) => {
     const urlObject = new URL(url);
     let parameterString = urlObject.search.slice(1);
 
@@ -14,16 +8,10 @@ const buildUrlWithSearchParms = function(url, parameters) {
     return urlObject.toString();
 }
 
-/**
- *
- * @param parameterObject
- * @param parameterString
- * @returns {string}
- */
-const buildSearchParameterString = function(parameterObject, parameterString = '') {
+const buildSearchParameterString = (parameterObject, parameterString = '') => {
     let parameter = new URLSearchParams(parameterString);
 
-    // Better way of looping over objects
+    // Better way of looping through objects
     // https://zellwk.com/blog/looping-through-js-objects/
     for (const [parameterValue, parameterKey] of Object.entries(parameterObject)) {
         parameter.append(parameterValue, parameterKey);
