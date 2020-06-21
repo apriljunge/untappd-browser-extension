@@ -1,16 +1,17 @@
 import Api from './Api.js';
 
-import {buildUrlWithSearchParms} from "../utils.js";
-import {UntappdClientSecret} from "../../secrets.js";
+import { buildUrlWithSearchParms } from '../utils.js';
+import { UntappdClientSecret } from '../../secrets.js';
 
 export default class Authentication extends Api {
-    constructor() {
+    constructor () {
         super();
 
-        this.baseUrl = "https://untappd.com/oauth/";
+        this.baseUrl = 'https://untappd.com/oauth/';
         this.redirectUrl = browser.identity.getRedirectURL();
     }
-    get token() {
+
+    get token () {
         return new Promise((resolve) => {
             this.authenticate()
                 .then((redirectUrl) => {
@@ -19,12 +20,15 @@ export default class Authentication extends Api {
                 .then((code) => {
                     return this.authorize(code);
                 })
-                .then(({access_token}) => {
+                /* eslint-disable camelcase */
+                .then(({ access_token }) => {
                     resolve(access_token);
                 });
+            /* eslint-enable */
         });
     }
-    authenticate() {
+
+    authenticate () {
         const authURL = buildUrlWithSearchParms(
             this.baseUrl + 'authenticate',
             {
@@ -39,10 +43,12 @@ export default class Authentication extends Api {
             interactive: true
         });
     }
-    extractUrlParameter(url, parameter) {
+
+    extractUrlParameter (url, parameter) {
         return new URL(url).searchParams.get(parameter);
     }
-    authorize(code) {
+
+    authorize (code) {
         return this.getFromApi('authorize', {
             client_id: this.clientId,
             client_secret: UntappdClientSecret,

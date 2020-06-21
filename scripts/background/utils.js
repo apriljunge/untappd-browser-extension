@@ -6,10 +6,10 @@ const buildUrlWithSearchParms = (url, parameters) => {
     urlObject.search = '?' + parameterString;
 
     return urlObject.toString();
-}
+};
 
 const buildSearchParameterString = (parameterObject, parameterString = '') => {
-    let parameter = new URLSearchParams(parameterString);
+    const parameter = new URLSearchParams(parameterString);
 
     // Better way of looping through objects
     // https://zellwk.com/blog/looping-through-js-objects/
@@ -18,9 +18,9 @@ const buildSearchParameterString = (parameterObject, parameterString = '') => {
     }
 
     return parameter.toString();
-}
+};
 
 export {
     buildUrlWithSearchParms,
     buildSearchParameterString
-}
+};

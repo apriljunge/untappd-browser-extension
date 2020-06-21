@@ -1,4 +1,10 @@
 {
+  "globals": {
+    "browser": true,
+    "Request": true,
+    "fetch": true,
+    "Headers": true
+  },
   "rules": {
     "semi": ["error", "always"],
     "indent": ["error", 4, {
