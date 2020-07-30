@@ -4,7 +4,7 @@
   "devDependencies": {
     "husky": "^4.2.5",
     "standardx": "^5.0.0",
-    "web-ext": "^4.3.0"
+    "web-ext": "^5.0.0"
   },
   "scripts": {
     "dev": "web-ext run",
