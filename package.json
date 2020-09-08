@@ -2,7 +2,7 @@
   "name": "untappd-browser-extension",
   "repository": "git@github.com:apriljunge/untappd-browser-extension.git",
   "devDependencies": {
-    "husky": "^4.2.5",
+    "husky": "^4.3.0",
     "standardx": "^5.0.0",
     "web-ext": "^5.0.0"
   },
