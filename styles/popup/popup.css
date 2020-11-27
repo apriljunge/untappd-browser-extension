@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+}
+
+main {
+    padding: 1rem 1.5rem;
+}
+
+main #info-panel {
+    display: none;
+}
+
+main.logged-in #authentication-dialog {
+    display: none;
+}
+
+main.logged-in #info-panel {
+    display: block;
+}

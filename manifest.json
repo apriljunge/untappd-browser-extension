@@ -20,7 +20,7 @@
     },
     "browser_action": {
         "browser_style": true,
-        "default_title": "Whereami?"
+        "default_popup": "popup.html"
     },
     "permissions": [
         "storage",

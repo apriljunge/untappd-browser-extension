@@ -9,8 +9,7 @@ const authenticate = async () => {
 };
 
 const requestUserAction = () => {
-    browser.browserAction.setBadgeBackgroundColor({ color: 'pink' });
-    browser.browserAction.setBadgeText({ text: 'CC' });
+
 };
 
 const checkToken = async () => {
@@ -19,6 +18,12 @@ const checkToken = async () => {
     }
 };
 
-browser.browserAction.onClicked.addListener(authenticate);
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    switch (request.execute) {
+        case 'authenticate':
+            authenticate();
+            break;
+    }
+});
 
 checkToken();
