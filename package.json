@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "web-ext run",
-    "lint": "web-ext lint & standardx --fix"
+    "lint": "web-ext lint && standardx --fix"
   },
   "husky": {
     "hooks": {
