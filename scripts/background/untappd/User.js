@@ -15,6 +15,10 @@ export default class User extends Api {
         };
     }
 
+    get accessToken () {
+        return false;
+    }
+
     set accessToken (token) {
         this.config.accessToken = token;
     }
