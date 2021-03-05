@@ -9,12 +9,12 @@
         <main>
             <div id="authentication-dialog">
                 <p>You're not connected to untappd yet</p>
-                <button data-authenticate type="button">Connect with untappd</button>
+                <button data-action="authenticate" type="button">Connect with untappd</button>
             </div>
             <div id="info-panel">
-                Hey {{Name}}. Du bist mit Untappd verbunden.
-                Zurzeit sind {{Anzahl Biere Syncronisiert}}.
-                <button>sdasd</button>
+                Du bist mit Untappd verbunden.
+                Zurzeit sind <span data-replace="beer-count">0</span> Biere syncronisiert.
+                <button data-action="sync" type="button">Sync</button>
             </div>
         </main>
 </body>

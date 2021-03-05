@@ -3,10 +3,13 @@ import { buildUrlWithSearchParms } from '../utils.js';
 
 export default class Api {
     constructor () {
-        this.baseUrl = 'https://api.untappd.com/v4/';
-        this.clientId = UntappdClientId;
         this.rateLimit = null;
         this.rateLimitRemaining = null;
+
+        this.config = {
+            clientId: UntappdClientId,
+            baseUrl: 'https://api.untappd.com/v4/'
+        };
 
         if (!UntappdClientId) {
             throw Error('Please define Untappd Client Id');
@@ -24,20 +27,20 @@ export default class Api {
     getFromApi (path, parameters) {
         return this.callApi(path, parameters)
             .then(this.checkResponseCode)
-            .then(this.extractRateLimit)
+            .then(this.extractRateLimit.bind(this))
             .then(this.parseResponseAsJson)
             .then(this.checkMetaResponseCode)
             .then(this.extractResponseFromApiCall);
     }
 
     callApi (path, parameters = {}) {
-        const url = `${this.baseUrl}${path}`;
+        const url = `${this.config.baseUrl}${path}`;
         const urlWithParameters = buildUrlWithSearchParms(url, parameters);
 
         // ToDo: think about good user agent for identification
         const request = new Request(urlWithParameters, {
             method: 'GET',
-            headers: new Headers({ 'User-Agent': `(${this.clientId})` })
+            headers: new Headers({ 'User-Agent': `(${this.config.clientId})` })
         });
 
         return fetch(request);
@@ -70,7 +73,7 @@ export default class Api {
     }
 
     checkMetaResponseCode (responseJson) {
-        if (responseJson.meta.http_code !== 200) {
+        if (responseJson.meta.code !== undefined && responseJson.meta.code !== 200) {
             throw new Error('Wrong response code from Untappd API');
         }
 
@@ -79,5 +82,17 @@ export default class Api {
 
     extractResponseFromApiCall (responseJson) {
         return responseJson.response;
+    }
+
+    async getFromStorage (key) {
+        const prefixedKey = this.config.storagePrefix + key;
+        const response = await browser.storage.local.get(prefixedKey);
+        return response[prefixedKey];
+    }
+
+    saveInStorage (key, value) {
+        browser.storage.local.set({
+            [this.config.storagePrefix + key]: value
+        });
     }
 }

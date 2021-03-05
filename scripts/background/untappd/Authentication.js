@@ -7,33 +7,46 @@ export default class Authentication extends Api {
     constructor () {
         super();
 
-        this.baseUrl = 'https://untappd.com/oauth/';
-        this.redirectUrl = browser.identity.getRedirectURL();
+        this._token = null;
+
+        this.config = {
+            ...this.config,
+            baseUrl: 'https://untappd.com/oauth/',
+            storagePrefix: 'untappd-authentication-',
+            redirectUrl: browser.identity.getRedirectURL()
+        };
     }
 
     get token () {
         return new Promise((resolve) => {
-            this.authenticate()
-                .then((redirectUrl) => {
-                    return this.extractUrlParameter(redirectUrl, 'code');
-                })
-                .then((code) => {
-                    return this.authorize(code);
-                })
-                /* eslint-disable camelcase */
-                .then(({ access_token }) => {
-                    resolve(access_token);
+            if (this._token !== null) {
+                resolve(this._token);
+            }
+
+            this.getFromStorage('token')
+                .then((token) => {
+                    this._token = token;
+                    resolve(this._token);
                 });
-            /* eslint-enable */
         });
     }
 
-    authenticate () {
+    async authenticate () {
+        const redirectUrl = await this.launchWebAuth();
+        const code = this.extractUrlParameter(redirectUrl, 'code');
+        /* eslint-disable camelcase */
+        const { access_token } = await this.authorize(code);
+        this._token = access_token;
+        /* eslint-enable camelcase */
+        this.saveInStorage('token', access_token);
+    }
+
+    launchWebAuth () {
         const authURL = buildUrlWithSearchParms(
-            this.baseUrl + 'authenticate',
+            this.config.baseUrl + 'authenticate',
             {
-                client_id: this.clientId,
-                redirect_url: this.redirectUrl,
+                client_id: this.config.clientId,
+                redirect_url: this.config.redirectUrl,
                 response_type: 'code'
             }
         );
@@ -50,9 +63,9 @@ export default class Authentication extends Api {
 
     authorize (code) {
         return this.getFromApi('authorize', {
-            client_id: this.clientId,
+            client_id: this.config.clientId,
             client_secret: UntappdClientSecret,
-            redirect_url: this.redirectUrl,
+            redirect_url: this.config.redirectUrl,
             response_type: 'code',
             code: code
         });
