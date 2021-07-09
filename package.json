@@ -2,13 +2,18 @@
   "name": "untappd-browser-extension",
   "repository": "git@github.com:apriljunge/untappd-browser-extension.git",
   "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/preset-env": "^7.13.9",
+    "babel-jest": "^26.6.3",
     "husky": "^4.3.6",
+    "jest": "^27.0.6",
     "standardx": "^7.0.0",
-    "web-ext": "^6.1.0"
+    "web-ext": "^5.4.0"
   },
   "scripts": {
     "dev": "web-ext run",
-    "lint": "web-ext lint && standardx --fix"
+    "lint": "web-ext lint && standardx --fix",
+    "test": "jest"
   },
   "husky": {
     "hooks": {
